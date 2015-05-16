@@ -295,9 +295,6 @@ class Youtube
             $params['pageToken'] = $token;
         }
 
-        //$apiData = $this->api_get($API_URL, $params);
-        //return $this->decodeList($apiData);
-
         $apiData = $this->api_get($API_URL, $params);
         if ($pageInfo) {
             return array(                
