@@ -282,16 +282,33 @@ class Youtube
      * @return array
      * @throws \Exception
      */
-    public function getPlaylistItemsByPlaylistId($playlistId, $maxResults = 50)
+    public function getPlaylistItemsByPlaylistId($playlistId, $maxResults = 50, $pageInfo = false, $token = NULL)
     {
         $API_URL = $this->getApi('playlistItems.list');
         $params = array(
             'playlistId' => $playlistId,
             'part' => 'id, snippet, contentDetails, status',
-            'maxResults' => $maxResults
+            'maxResults' => $maxResults,
+            'pageToken' => NULL
         );
+        if ($token != NULL) {
+            $params['pageToken'] = $token;
+        }
+
+        //$apiData = $this->api_get($API_URL, $params);
+        //return $this->decodeList($apiData);
+
         $apiData = $this->api_get($API_URL, $params);
-        return $this->decodeList($apiData);
+        if ($pageInfo) {
+            return array(                
+                'results' => $this->decodeList($apiData),
+                'info'    => $this->page_info
+            );
+        } else {
+            return array(                
+                'results' => $this->decodeList($apiData)
+            );
+        }
     }
 
     /**
